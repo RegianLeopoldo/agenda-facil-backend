@@ -5,7 +5,8 @@ import jwt from "jsonwebtoken";
 
 const router = Router();
 
-const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
+const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID!;
+const client = new OAuth2Client(GOOGLE_CLIENT_ID);
 
 router.post("/google", async (req, res) => {
   try {
@@ -19,7 +20,7 @@ router.post("/google", async (req, res) => {
 
     const ticket = await client.verifyIdToken({
       idToken: token,
-      audience: process.env.GOOGLE_CLIENT_ID,
+      audience: GOOGLE_CLIENT_ID,
     });
 
     const payload = ticket.getPayload();
@@ -34,17 +35,18 @@ router.post("/google", async (req, res) => {
 
     let usuario = await prisma.usuario.findUnique({
       where: {
-        googleId: sub,
+        providerId: sub,
       },
     });
 
     if (!usuario) {
       usuario = await prisma.usuario.create({
         data: {
-          googleId: sub!,
+          providerId: sub,
+          provider: "google",
           nome: name ?? "",
           email: email!,
-          foto: picture ?? "",
+          imagem: picture ?? "",
         },
       });
     }

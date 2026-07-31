@@ -57,6 +57,7 @@ router.post("/", async (req, res) => {
         data: new Date(data),
         horario,
         local,
+        usuarioId: 1,
       },
     });
 
