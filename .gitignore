@@ -1,9 +1,19 @@
 node_modules
-# Keep environment variables out of version control
+
+# Environment variables
 .env
 
+# Prisma generated
 /generated/prisma
 
+# TypeScript build
+dist
+*.js
+*.js.map
+*.d.ts
+*.d.ts.map
+
+# AI tools
 .agents/
 .claude/
 .windsurf/
