@@ -3,8 +3,8 @@
     "rootDir": "./src",
     "outDir": "./dist",
 
-    "module": "commonjs",
-    "target": "es2020",
+    "module": "nodenext",
+    "target": "esnext",
 
     "types": ["node"],
 
