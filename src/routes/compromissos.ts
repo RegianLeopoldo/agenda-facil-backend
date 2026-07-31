@@ -1,33 +1,47 @@
 import { Router } from "express";
 import prisma from "../lib/prisma";
+import { autenticar, AuthRequest } from "../middleware/auth";
 
 const router = Router();
 
-// GET - listar compromissos
-router.get("/", async (req, res) => {
+// Todas as rotas exigem autenticação
+router.use(autenticar);
+
+// =========================
+// GET - Listar compromissos
+// =========================
+router.get("/", async (req: AuthRequest, res) => {
   try {
     const compromissos = await prisma.compromisso.findMany({
+      where: {
+        usuarioId: req.usuarioId!,
+      },
       orderBy: {
         data: "asc",
       },
     });
 
-    res.json(compromissos);
+    return res.json(compromissos);
   } catch (error) {
-    res.status(500).json({
+    console.error(error);
+
+    return res.status(500).json({
       erro: "Erro ao buscar compromissos",
     });
   }
 });
 
-// GET - buscar compromisso por ID
-router.get("/:id", async (req, res) => {
+// ==============================
+// GET - Buscar compromisso por ID
+// ==============================
+router.get("/:id", async (req: AuthRequest, res) => {
   try {
-    const { id } = req.params;
+    const id = Number(req.params.id);
 
-    const compromisso = await prisma.compromisso.findUnique({
+    const compromisso = await prisma.compromisso.findFirst({
       where: {
-        id: Number(id),
+        id,
+        usuarioId: req.usuarioId!,
       },
     });
 
@@ -37,18 +51,28 @@ router.get("/:id", async (req, res) => {
       });
     }
 
-    res.json(compromisso);
+    return res.json(compromisso);
   } catch (error) {
-    res.status(500).json({
+    console.error(error);
+
+    return res.status(500).json({
       erro: "Erro ao buscar compromisso",
     });
   }
 });
 
-// POST - criar compromisso
-router.post("/", async (req, res) => {
+// =========================
+// POST - Criar compromisso
+// =========================
+router.post("/", async (req: AuthRequest, res) => {
   try {
     const { titulo, descricao, data, horario, local } = req.body;
+
+    if (!titulo || !descricao || !data || !horario || !local) {
+      return res.status(400).json({
+        erro: "Todos os campos são obrigatórios",
+      });
+    }
 
     const compromisso = await prisma.compromisso.create({
       data: {
@@ -57,30 +81,46 @@ router.post("/", async (req, res) => {
         data: new Date(data),
         horario,
         local,
-        usuarioId: 1,
+        usuarioId: req.usuarioId!,
       },
     });
 
-    res.status(201).json(compromisso);
+    return res.status(201).json(compromisso);
   } catch (error) {
-    res.status(500).json({
+    console.error(error);
+
+    return res.status(500).json({
       erro: "Erro ao criar compromisso",
     });
   }
 });
 
-// PUT - atualizar compromisso
-router.put("/:id", async (req, res) => {
+// ===========================
+// PUT - Atualizar compromisso
+// ===========================
+router.put("/:id", async (req: AuthRequest, res) => {
   try {
-    const { id } = req.params;
+    const id = Number(req.params.id);
 
     const { data, ...resto } = req.body;
 
-    const compromisso = await prisma.compromisso.update({
+    const compromisso = await prisma.compromisso.findFirst({
       where: {
-        id: Number(id),
+        id,
+        usuarioId: req.usuarioId!,
       },
+    });
 
+    if (!compromisso) {
+      return res.status(404).json({
+        erro: "Compromisso não encontrado",
+      });
+    }
+
+    const atualizado = await prisma.compromisso.update({
+      where: {
+        id: compromisso.id,
+      },
       data: {
         ...resto,
         ...(data && {
@@ -89,24 +129,27 @@ router.put("/:id", async (req, res) => {
       },
     });
 
-    res.json(compromisso);
+    return res.json(atualizado);
   } catch (error) {
     console.error(error);
 
-    res.status(500).json({
+    return res.status(500).json({
       erro: "Erro ao atualizar compromisso",
     });
   }
 });
 
-// DELETE - excluir compromisso
-router.delete("/:id", async (req, res) => {
+// ==========================
+// DELETE - Excluir compromisso
+// ==========================
+router.delete("/:id", async (req: AuthRequest, res) => {
   try {
-    const { id } = req.params;
+    const id = Number(req.params.id);
 
-    const compromisso = await prisma.compromisso.findUnique({
+    const compromisso = await prisma.compromisso.findFirst({
       where: {
-        id: Number(id),
+        id,
+        usuarioId: req.usuarioId!,
       },
     });
 
@@ -118,17 +161,17 @@ router.delete("/:id", async (req, res) => {
 
     await prisma.compromisso.delete({
       where: {
-        id: Number(id),
+        id: compromisso.id,
       },
     });
 
-    res.json({
-      mensagem: "Compromisso removido",
+    return res.json({
+      mensagem: "Compromisso removido com sucesso",
     });
   } catch (error) {
     console.error(error);
 
-    res.status(500).json({
+    return res.status(500).json({
       erro: "Erro ao excluir compromisso",
     });
   }
