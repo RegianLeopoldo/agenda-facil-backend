@@ -7,13 +7,29 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Usuario {
+  id            Int            @id @default(autoincrement())
+  nome          String?
+  email         String         @unique
+  imagem        String?
+  provider      String?
+  providerId    String?        @unique
+
+  criadoEm      DateTime       @default(now())
+
+  compromissos  Compromisso[]
+}
+
 model Compromisso {
-  id        Int      @id @default(autoincrement())
-  titulo    String
-  descricao String
-  data      DateTime
-  horario   String
-  local     String
-  status    String   @default("PENDENTE")
-  criadoEm  DateTime @default(now())
+  id         Int       @id @default(autoincrement())
+  titulo     String
+  descricao  String
+  data       DateTime
+  horario    String
+  local      String
+  status     String    @default("PENDENTE")
+  criadoEm   DateTime  @default(now())
+
+  usuarioId  Int
+  usuario    Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
 }

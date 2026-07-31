@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 import compromissosRoutes from "./routes/compromissos";
+import authRoutes from "./routes/auth";
 
 dotenv.config();
 
@@ -12,6 +13,7 @@ app.use(cors());
 
 app.use(express.json());
 
+app.use("/auth", authRoutes);
 app.use("/compromissos", compromissosRoutes);
 
 app.listen(3333, () => {
