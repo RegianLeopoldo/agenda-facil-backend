@@ -67,6 +67,7 @@ router.post("/google", async (req, res) => {
       token: jwtToken,
     });
   } catch (error) {
+    console.error("ERRO LOGIN GOOGLE:");
     console.error(error);
 
     res.status(401).json({
