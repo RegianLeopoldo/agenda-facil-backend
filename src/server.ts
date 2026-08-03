@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 
 import compromissosRoutes from "./routes/compromissos";
+import notificacoesRoutes from "./routes/notificacoes";
 import authRoutes from "./routes/auth";
 import { iniciarSchedulerLembretes } from "./services/lembreteScheduler";
 
@@ -16,6 +17,7 @@ app.use(express.json());
 
 app.use("/auth", authRoutes);
 app.use("/compromissos", compromissosRoutes);
+app.use("/notificacoes", notificacoesRoutes);
 
 iniciarSchedulerLembretes();
 

@@ -18,6 +18,7 @@ model Usuario {
   criadoEm      DateTime       @default(now())
 
   compromissos  Compromisso[]
+  notificacoes  Notificacao[]
 }
 
 model Compromisso {
@@ -35,4 +36,20 @@ model Compromisso {
 
   usuarioId        Int
   usuario          Usuario   @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  notificacoes     Notificacao[]
+}
+
+model Notificacao {
+  id             Int      @id @default(autoincrement())
+  titulo         String
+  mensagem       String
+  lida           Boolean  @default(false)
+  criadaEm       DateTime @default(now())
+
+  usuarioId      Int
+  usuario         Usuario  @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  compromissoId  Int?
+  compromisso    Compromisso? @relation(fields: [compromissoId], references: [id], onDelete: Cascade)
 }
