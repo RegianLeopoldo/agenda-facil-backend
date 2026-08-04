@@ -96,7 +96,18 @@ Agenda Fácil
           },
         });
 
-        console.log(`✅ Lembrete enviado: compromisso ${compromisso.id}`);
+        await prisma.notificacao.create({
+          data: {
+            titulo: "Lembrete de compromisso",
+            mensagem: `Seu compromisso "${compromisso.titulo}" acontecerá em breve, às ${compromisso.horario}.`,
+            usuarioId: compromisso.usuarioId,
+            compromissoId: compromisso.id,
+          },
+        });
+
+        console.log(
+          `✅ Lembrete enviado e notificação criada: compromisso ${compromisso.id}`,
+        );
       } else {
         console.log(
           `❌ Não foi possível enviar o lembrete: compromisso ${compromisso.id}`,
