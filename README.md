@@ -313,9 +313,13 @@ Este projeto foi desenvolvido para fins acadêmicos, de estudo e portfólio.
 
 ---
 
-## 👨‍💻 Desenvolvedor
+## 👨‍💻 Grupo
 
-**Regian Leopoldo Vieira**
+* **Severino Regian Leopoldo da Silva Vieira**
+* **Aline Oliveira Gomes**
+* **Robério Madson Dias da Cunha**
+* **Taliane de Souza Louzeiro Alves**
+
 
 ### GitHub
 
