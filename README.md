@@ -315,7 +315,7 @@ Este projeto foi desenvolvido para fins acadêmicos, de estudo e portfólio.
 
 ## 👨‍💻 Desenvolvedor
 
-**Regian Leopoldo**
+**Regian Leopoldo Vieira**
 
 ### GitHub
 
