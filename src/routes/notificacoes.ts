@@ -7,9 +7,7 @@ const router = Router();
 // Todas as rotas exigem autenticação
 router.use(autenticar);
 
-// =============================
-// GET - Listar notificações
-// =============================
+// Listar notificações
 router.get("/", async (req: AuthRequest, res) => {
   try {
     const notificacoes = await prisma.notificacao.findMany({
@@ -34,9 +32,7 @@ router.get("/", async (req: AuthRequest, res) => {
   }
 });
 
-// ===================================
-// GET - Contar notificações não lidas
-// ===================================
+// Contar notificações não lidas
 router.get("/nao-lidas", async (req: AuthRequest, res) => {
   try {
     const quantidade = await prisma.notificacao.count({
@@ -58,9 +54,7 @@ router.get("/nao-lidas", async (req: AuthRequest, res) => {
   }
 });
 
-// =============================
-// PUT - Marcar como lida
-// =============================
+// Marcar como lida
 router.put("/:id/lida", async (req: AuthRequest, res) => {
   try {
     const id = Number(req.params.id);
@@ -97,9 +91,7 @@ router.put("/:id/lida", async (req: AuthRequest, res) => {
   }
 });
 
-// =================================
-// PUT - Marcar todas como lidas
-// =================================
+// Marcar todas como lidas
 router.put("/lidas/todas", async (req: AuthRequest, res) => {
   try {
     await prisma.notificacao.updateMany({

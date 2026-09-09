@@ -5,13 +5,24 @@ import dotenv from "dotenv";
 import compromissosRoutes from "./routes/compromissos";
 import notificacoesRoutes from "./routes/notificacoes";
 import authRoutes from "./routes/auth";
+
 import { iniciarSchedulerLembretes } from "./services/lembreteScheduler";
 
 dotenv.config();
 
 const app = express();
 
-app.use(cors());
+const allowedOrigins = [
+  "http://localhost:3000",
+  "https://agenda-facil-frontend-omega.vercel.app",
+];
+
+app.use(
+  cors({
+    origin: allowedOrigins,
+    credentials: true,
+  }),
+);
 
 app.use(express.json());
 
